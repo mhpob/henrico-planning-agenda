@@ -1,0 +1,24 @@
+---
+title: "Henrico Planning Commission"
+format: dashboard
+editor: visual
+---
+
+```{r}
+library(targets)
+agenda_date <- tar_read(agenda_df)$hearing_date |> 
+  unique() |> 
+  format('%B %d, %Y')
+last_update <- tar_meta(names = "agenda")$time |> 
+  format('%B %d, %Y %H:%M:%S')
+```
+
+Displaying cases for the meeting on `r agenda_date`.
+
+
+Last updated: `r last_update`
+
+## Row {height=100%}
+```{r}
+tar_read(leaflet)
+```

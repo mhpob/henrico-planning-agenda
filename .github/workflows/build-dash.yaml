@@ -1,0 +1,92 @@
+# adapted from:
+# <https://github.com/gadenbuie/mynorfolk-dash/blob/main/.github/workflows/build-dash.yaml>
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.qmd'
+      - '**.R'
+  schedule:
+      - cron: "0 5 * * *"
+  workflow_dispatch:
+
+name: build-dash
+
+permissions:
+  contents: write
+
+jobs:
+  build-dash:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      RENV_PATHS_ROOT: ~/.local/share/renv
+    steps:
+
+    - name: Check out repository
+      uses: actions/checkout@v4
+
+    - name: Set up Quarto
+      uses: quarto-dev/quarto-actions/setup@v2
+
+    - name: Set up R
+      uses: r-lib/actions/setup-r@v2
+      with:
+        use-public-rspm: true
+
+    # - name: Add Ubuntu dependencies
+    #   run: sudo apt-get install libglpk40
+
+    - name: Set up R packages
+      uses: r-lib/actions/setup-r-dependencies@v2
+      with:
+        packages:
+          any::dplyr
+          any::knitr
+          any::leaflet
+          any::pdftols
+          any::sf
+          any::tarchetypes
+          any::targets
+          any::qs
+          any::quarto
+
+    - name: Cache targets data
+      uses: actions/cache@v4
+      with:
+        path: _targets
+        key: ${{ runner.os }}-targets-v1-${{ hashFiles('**/cache.log') }}
+        restore-keys: |
+            ${{ runner.os }}-targets-v1-
+
+    - name: Build Pipeline and Dashboard
+      run: Rscript -e 'targets::tar_make()'
+
+    - name: Update planning log
+      run: Rscript -e 'sf::st_write(targets::tar_read(parcels), "henrico_planning_log.csv", layer_options = "GEOMETRY=AS_WKT", append = TRUE)'
+
+    - name: Was the dashboard updated?
+      id: dashboard-updated
+      run: |
+        if [[ $(git status --porcelain -- index.html index_files/) ]]; then
+          echo "has_update=true" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Push Built Dashboard
+      if: steps.dashboard-updated.outputs.has_update == 'true'
+      run: |
+          git config --global user.name 'gha update bot'
+          git config --global user.email 'mhpob@users.noreply.github.com'
+          git add --all
+          git commit --allow-empty -m "[auto] Build Dashboard $(TZ=America/New_York date +'%Y-%m-%d %H:%M')"
+          git push
+
+    - name: Render and Publish
+      if: steps.dashboard-updated.outputs.has_update == 'true'
+      uses: quarto-dev/quarto-actions/publish@v2
+      with:
+        target: gh-pages
+        render: false
+        path: index.qmd
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
