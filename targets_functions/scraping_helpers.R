@@ -17,7 +17,7 @@ grab_agenda_date <- function(agenda) {
 
 grab_district <- function(x) {
   gsub(
-    '(?<=(BROOKLAND|FAIRFIELD|THREE CHOPT|TUCKAHOE|VARINA)): .*',
+    '(?:(?<=BROOKLAND)|(?<=FAIRFIELD)|(?<=THREE CHOPT)|(?<=TUCKAHOE)|(?<=VARINA)): .*',
     '',
     x = x,
     perl = TRUE
