@@ -9,13 +9,15 @@ library(targets)
 agenda_date <- tar_read(agenda_df)$hearing_date |> 
   unique() |> 
   format('%B %d, %Y')
+last_check <- Sys.time() |>
+  format('%B %d, %Y %H:%M:%S', tz = "America/New_York")
 last_update <- tar_meta(names = "agenda")$time |> 
-  format('%B %d, %Y %H:%M:%S')
+  format('%B %d, %Y %H:%M:%S', tz = "America/New_York")
 ```
 
 Displaying cases for the meeting on `r agenda_date`.
 
-
+Last checked for updates: `r last_check`
 Last updated: `r last_update`
 
 ## Row {height=100%}
