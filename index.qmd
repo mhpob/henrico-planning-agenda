@@ -9,18 +9,26 @@ library(targets)
 agenda_date <- tar_read(agenda_df)$hearing_date |> 
   unique() |> 
   format('%B %d, %Y')
+n_cases <- tar_read(agenda_df)$case |> 
+  unique() |> 
+  length()
 last_check <- Sys.time() |>
   format('%B %d, %Y %H:%M:%S', tz = "America/New_York")
 last_update <- tar_meta(names = "agenda")$time |> 
   format('%B %d, %Y %H:%M:%S', tz = "America/New_York")
 ```
 
-Displaying cases for the meeting on `r agenda_date`.
+Displaying `r n_cases` cases that are on the agenda for the Henrico County Planning Commission meeting on `r agenda_date`.
 
 Last checked for updates: `r last_check`
+
 Last updated: `r last_update`
 
 ## Row {height=100%}
+### Column {width=40%}
 ```{r}
 tar_read(leaflet)
 ```
+
+### Column {width=60%}
+`r unique(tar_read(agenda_df)$description) |> paste(collapse = '\n\n')`
