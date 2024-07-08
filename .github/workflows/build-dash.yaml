@@ -44,7 +44,7 @@ jobs:
           any::dplyr
           any::knitr
           any::leaflet
-          any::pdftols
+          any::pdftools
           any::sf
           any::tarchetypes
           any::targets
