@@ -2,6 +2,9 @@
 title: "Henrico Planning Commission"
 format: dashboard
 editor: visual
+
+resources:
+  - CNAME
 ---
 
 ```{r}
