@@ -1,10 +1,12 @@
 ---
-title: "Henrico Planning Commission"
+title: "Planning Commission Agenda"
+logo: assets/logo-henrico-county.png
 format: dashboard
 editor: visual
 
 resources:
   - CNAME
+  - assets/logo-henrico-county.png
 ---
 
 ```{r}
@@ -27,11 +29,14 @@ Last checked for updates: `r last_check`
 
 Last updated: `r last_update`
 
-## Row {height=100%}
-### Column {width=40%}
+## Row {height="100%"}
+
+### Column {width="40%"}
+
 ```{r}
 tar_read(leaflet)
 ```
 
-### Column {width=60%}
+### Column {width="60%"}
+
 `r unique(tar_read(agenda_df)$description) |> paste(collapse = '\n\n')`
