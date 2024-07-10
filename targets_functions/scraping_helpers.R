@@ -93,3 +93,8 @@ grab_applicant_rep <- function(x){
     USE.NAMES = FALSE
   )
 }
+
+
+grab_agenda_update <- function(agenda) {
+  pdf_info(agenda)$modified
+}

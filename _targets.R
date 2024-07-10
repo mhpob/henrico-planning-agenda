@@ -54,6 +54,7 @@ for(i in seq_along(funcs)){
 # Replace the target list below with your own:
 list(
   tar_url(agenda, 'https://henrico.gov/pdfs/planning/meetnext.pdf'),
+  tar_target(agenda_update, grab_agenda_update(agenda)),
   tar_target(parsed_agenda, scrape_agenda(agenda)),
   tar_target(agenda_df, build_agenda_df(parsed_agenda)),
 

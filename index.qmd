@@ -18,16 +18,18 @@ agenda_date <- tar_read(agenda_df)$hearing_date |>
 n_cases <- tar_read(agenda_df)$case |> 
   unique() |> 
   length()
-last_check <- Sys.time() |>
+last_dash_check <- Sys.time() |>
   format('%B %d, %Y %H:%M:%S', tz = "America/New_York")
-last_update <- tar_meta(names = "agenda")$time |> 
+last_dash_update <- tar_meta(names = "agenda")$time |> 
   as.Date('%B %d, %Y %H:%M:%S', tz = "America/New_York") |> 
   format('%B %d, %Y')
+last_agenda_update <- tar_read(agenda_update)
 ```
 
 # Planning
 
 ## Row {height="30%"}
+
 ```{r}
 #| content: valuebox
 #| title: "Next meeting"
@@ -49,6 +51,7 @@ list(
   value = n_cases
 )
 ```
+
 ```{r}
 #| content: valuebox
 #| title: "Agenda last updated"
@@ -56,7 +59,7 @@ list(
 list(
   icon = "arrow-repeat",
   color = "light",
-  value = last_update
+  value = last_agenda_update
 )
 ```
 
