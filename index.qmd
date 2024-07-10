@@ -14,7 +14,7 @@ theme:
 library(targets)
 agenda_date <- tar_read(agenda_df)$hearing_date |> 
   unique() |> 
-  format('%B %d, %Y')
+  format('%B %d')
 n_cases <- tar_read(agenda_df)$case |> 
   unique() |> 
   length()
@@ -23,7 +23,8 @@ last_dash_check <- Sys.time() |>
 last_dash_update <- tar_meta(names = "agenda")$time |> 
   as.Date('%B %d, %Y %H:%M:%S', tz = "America/New_York") |> 
   format('%B %d, %Y')
-last_agenda_update <- tar_read(agenda_update)
+last_agenda_update <- tar_read(agenda_update) |> 
+  format('%B %d')
 ```
 
 # Planning
