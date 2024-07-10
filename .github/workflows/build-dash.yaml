@@ -62,9 +62,6 @@ jobs:
     - name: Build Pipeline and Dashboard
       run: Rscript -e 'targets::tar_make()'
 
-    - name: Update planning log
-      run: Rscript -e 'sf::st_write(targets::tar_read(parcels), "henrico_planning_log.csv", layer_options = "GEOMETRY=AS_WKT", append = TRUE)'
-
     - name: Was the dashboard updated?
       id: dashboard-updated
       run: |
