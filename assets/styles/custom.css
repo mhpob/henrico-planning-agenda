@@ -1,0 +1,7 @@
+/*-- scss:defaults --*/
+// $navbar-bg: #FFF !default;
+
+/*-- scss:rules --*/
+.quarto-dashboard .bslib-value-box .value-box-value {
+    font-size: clamp(.1em, 10cqw, 2em) !important;
+}

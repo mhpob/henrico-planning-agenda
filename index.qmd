@@ -3,10 +3,11 @@ title: "Planning Commission Agenda"
 logo: assets/logo-henrico-county.png
 format: dashboard
 editor: visual
-
 resources:
   - CNAME
   - assets/logo-henrico-county.png
+theme:
+  - assets/styles/custom.css
 ---
 
 ```{r}
@@ -20,16 +21,46 @@ n_cases <- tar_read(agenda_df)$case |>
 last_check <- Sys.time() |>
   format('%B %d, %Y %H:%M:%S', tz = "America/New_York")
 last_update <- tar_meta(names = "agenda")$time |> 
-  format('%B %d, %Y %H:%M:%S', tz = "America/New_York")
+  as.Date('%B %d, %Y %H:%M:%S', tz = "America/New_York") |> 
+  format('%B %d, %Y')
 ```
 
-Displaying `r n_cases` cases that are on the agenda for the Henrico County Planning Commission meeting on `r agenda_date`.
+# Planning
 
-Last checked for updates: `r last_check`
+## Row {height="30%"}
+```{r}
+#| content: valuebox
+#| title: "Next meeting"
 
-Last updated: `r last_update`
+list(
+  icon = "calendar-event",
+  color = "warning",
+  value = agenda_date
+)
+```
 
-## Row {height="100%"}
+```{r}
+#| content: valuebox
+#| title: "Cases on the agenda"
+
+list(
+  icon = "inboxes-fill",
+  color = "info",
+  value = n_cases
+)
+```
+```{r}
+#| content: valuebox
+#| title: "Agenda last updated"
+
+list(
+  icon = "arrow-repeat",
+  color = "light",
+  value = last_update
+)
+```
+
+## Row
 
 ### Column {width="40%"}
 
@@ -40,3 +71,20 @@ tar_read(leaflet)
 ### Column {width="60%"}
 
 `r unique(tar_read(agenda_df)$description) |> paste(collapse = '\n\n')`
+
+# Disclaimer and Data Sources
+
+This dashboard was created independently of Henrico County, VA and is not sponsored by, supported by, or associated with the County.
+
+## Data Source
+
+-   Planning Commission agenda
+    -   <https://henrico.gov/pdfs/planning/meetnext.pdf>
+-   Parcel data:
+    -   <https://portal.henrico.us/mapping/rest/services/Layers/Tax_Parcels_and_CAMA_Data_External/MapServer>
+-   Existing use:
+    -   [https://portal.henrico.us/mapping/rest/services/Layers/Existing_Land_Use/MapServer](https://portal.henrico.us/mapping/rest/services/Layers/Existing_Land_Use/MapServer/)
+-   2026 Future Land Use:
+    -   <https://portal.henrico.us/mapping/rest/services/Layers/Future_Land_Use_2026/MapServer>
+-   Zoning:
+    -   <https://portal.henrico.us/mapping/rest/services/Planning/Zoning/MapServer>
