@@ -9,7 +9,7 @@ library(tarchetypes) # Load other packages as needed.
 
 # Set target options:
 tar_option_set(
-  packages = c("pdftools", "dplyr", "sf", "leaflet"),
+  packages = c("pdftools", "dplyr", "sf", "leaflet", "data.table"),
   format = "qs" # Optionally set the default storage format. qs is fast.
   #
   # Pipelines that take a long time to run may benefit from
@@ -60,6 +60,8 @@ list(
   tar_target(raw_parcels, grab_parcels(agenda_df)),
   tar_target(parcels, join_parcels(agenda_df, raw_parcels)),
   tar_target(leaflet, build_leaflet(parcels)),
+
+  tar_target(planning_log, write_record(parcels), format = 'file'),
 
   tar_quarto(
     henrico_planning_dashboard,
